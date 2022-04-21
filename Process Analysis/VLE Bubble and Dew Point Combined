@@ -1,0 +1,43 @@
+# choosing which value to calculate
+Ch = input('To Calculate the Bubble Point Temperature, Enter 1. To Calculate the Dew Point Temperature, Enter 2: ')
+# defining variables
+P = float(input('Enter the given pressure in mmHg: '))
+x1 = float(input('Enter the mole fraction of component 1: '))
+print('Enter the Antoine Constants A, B, C for component 1: ')
+A1 = float(input('A1: '))
+B1 = float(input('B1: '))
+C1 = float(input('C1: '))
+print('Enter the Antoine Constants A, B, C for component 2: ')
+A2 = float(input('A2: '))
+B2 = float(input('B2: '))
+C2 = float(input('C2: '))
+T = float(input('Guess Temperature: '))
+
+if Ch == '1':
+    # calculating the bubble point temperature
+    exp1 = x1 * (10 ** (A1 - B1 / (T + C1))) + (1 - x1) * (10 ** (A2 - B2 / (T + C2))) - P
+    while abs(exp1) > 0.01:
+        exp1 = x1 * (10 ** (A1 - B1 / (T + C1))) + (1 - x1) * (10 ** (A2 - B2 / (T + C2))) - P
+        if exp1 > 0:
+            T -= 0.001
+        else:
+            T += 0.001
+    else:
+        print("Bubble Point Temperature: " + str(T))
+        print("Component 1 Vapor Pressure: " + str(10 ** (A1 - B1 / (T + C1))))
+        print("Component 2 Vapor Pressure: " + str(10 ** (A2 - B2 / (T + C2))))
+elif Ch == '2':
+    # calculating the dew point temperature
+    exp2 = P * (x1 / 10 ** (A1 - B1 / (T + C1)) + (1-x1) / 10 ** (A2 - B2 / (T + C2))) - 1
+    while abs(exp2) > 0.001:
+        exp2 = P * (x1 / 10 ** (A1 - B1 / (T + C1)) + (1-x1) / 10 ** (A2 - B2 / (T + C2))) - 1
+        if exp2 < 0:
+            T -= 0.001
+        else:
+            T += 0.001
+    else:
+        print("Dew Point Temperature: " + str(T))
+        print("Component 1 Vapor Pressure: " + str(10 ** (A1 - B1 / (T + C1))))
+        print("Component 2 Vapor Pressure: " + str(10 ** (A2 - B2 / (T + C2))))
+else:
+    print("Please Choose from 1 and 2")
